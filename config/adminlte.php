@@ -342,7 +342,7 @@ return [
         ],
         [
             'text'       => 'Crear nuevo post',
-            'url'        => 'admin.posts.create',
+            'route'        => 'admin.posts.create',
             'icon'  => 'fas fa-fw fa-file'
         ],
     ],

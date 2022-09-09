@@ -9,3 +9,4 @@
 @section('content')
     @livewire('admin.posts-index')
 @stop
+

@@ -19,7 +19,7 @@
             <a class="btn btn-secondary" href="{{ route('admin.categories.create') }}">Nueva categoría</a>
         </div>
         <div class="card-body">
-            <table class="table table-striped">
+            <table class="table table-striped" id="categor">
                 <thead>
                     <tr>
                         <th>ID</th>
