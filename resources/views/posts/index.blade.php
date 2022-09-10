@@ -2,7 +2,7 @@
     <div class="max-w-7xl my-8 mx-auto px-4 sm:px-6 lg:px-8">
             <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
                 @foreach ($posts as $post)
-                    <article class="w-full h-80 bg-cover bg-center @if ($loop->first) md:col-span-2 @endif" style="background-image: url({{ asset('storage/'.$post->image->url) }})">
+                    <article class="w-full h-80 bg-cover bg-center @if ($loop->first) md:col-span-2 @endif" style="background-image: url(@if($post->image) {{ asset('storage/'.$post->image->url) }} @else {{asset('storage/defaultPost.jpg')}}  @endif)">
                         <div class="w-full h-full px-8 flex flex-col justify-center">
                             <div class="mb-3">
                                 @foreach ($post->tags as $tag)
