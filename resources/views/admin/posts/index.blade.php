@@ -7,6 +7,13 @@
 @stop
 
 @section('content')
+
+    @if (session('alert'))
+        <div class="alert alert-success" role="alert">
+            <strong>{{session('alert')}}</strong>
+        </div>
+    @endif
+    
     @livewire('admin.posts-index')
 @stop
 
