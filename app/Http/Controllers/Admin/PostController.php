@@ -11,24 +11,25 @@ use App\Models\Tag;
 use Illuminate\Support\Facades\Storage;
 
 use App\Http\Requests\PostRequest;
+use Illuminate\Support\Facades\Cache;
 
 class PostController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
+
+    public function __construct()
+    {
+        $this->middleware('can:admin.posts.index')->only('index');
+        $this->middleware('can:admin.posts.create')->only('create', 'store');
+        $this->middleware('can:admin.posts.edit')->only('edit', 'update');
+        $this->middleware('can:admin.posts.destroy')->only('destroy');
+
+    }
+ 
     public function index()
     {
-        return view('admin.posts.index');
+        return view('admin.posts.index'); 
     }
 
-    /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
     public function create()
     {
         $categories = Category::pluck('name', 'id');
@@ -37,12 +38,6 @@ class PostController extends Controller
         return view('admin.posts.create', compact('categories', 'tags'));
     }
 
-    /**
-     * Store a newly created resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
-     */
     public function store(PostRequest $request)
     {
         // return Storage::disk('public')->put('posts', $request->file('file'));
@@ -59,6 +54,10 @@ class PostController extends Controller
             ]);
         }
 
+        // Elimina la cache de la llave y realiza la consulta
+        // para mostrar el nuevo post
+        Cache::flush();
+
         // Para actualizar las etiquetas con collective
         if ($request->tags) {
             $post->tags()->attach($request->tags);
@@ -67,23 +66,6 @@ class PostController extends Controller
         return redirect()->route('admin.posts.edit', compact('post'));
     }
 
-    /**
-     * Display the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function show(Post $post)
-    {
-        return view('admin.posts.show', compact('post'));
-    }
-
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
     public function edit(Post $post)
     {
         // Validar que ese registro sea del usuario autenticado y permitira su actualización
@@ -95,13 +77,6 @@ class PostController extends Controller
 
     }
 
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
     public function update(PostRequest $request, Post $post)
     {
         // Validar que ese registro sea del usuario autenticado y permitira su actualización
@@ -131,22 +106,19 @@ class PostController extends Controller
             $post->tags()->sync($request->tags);
         }
 
-
+        Cache::flush();
+        
         return redirect()->route('admin.posts.edit', $post)->with('alert', 'El post se actualizó con éxito');
     }
 
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
     public function destroy(Post $post)
     {
         // Validar que ese registro sea del usuario autenticado y permitira su eliminación
         $this->authorize('author', $post);
 
         $post->delete();
+
+        Cache::flush();
 
         return redirect()->route('admin.posts.index')->with('alert', 'El post se eliminó con éxito');
 

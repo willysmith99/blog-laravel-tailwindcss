@@ -324,6 +324,13 @@ return [
             'can'        => 'admin.users.index',
             'active'    => ['admin/users*']
         ],
+        [
+            'text'        => 'Lista de roles',
+            'route'         => 'admin.roles.index',
+            'icon'        => 'fas fa-users-cog fa-fw',
+            // 'can'        => 'admin.roles.index',
+            'active'    => ['admin/roles*']
+        ],
 
         [
             'text' => 'Categorías',

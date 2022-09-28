@@ -21,14 +21,14 @@
 
                     <tbody>
                         @foreach ($users as $user)
-                                <tr>
-                                    <td>{{$user->id}}</td>
-                                    <td>{{$user->name}}</td>
-                                    <td>{{$user->email}}</td>
-                                    <td width="10px">
-                                        <a class="btn btn-primary btn-sm" href="{{route('admin.users.edit', $user)}}">Editar</a>
-                                    </td>
-                                </tr>
+                        <tr>
+                            <td>{{$user->id}}</td>
+                            <td>{{$user->name}}</td>
+                            <td>{{$user->email}}</td>
+                            <td width="10px">
+                                <a class="btn btn-primary btn-sm" href="{{route('admin.users.edit', $user)}}">Editar</a>
+                            </td>
+                        </tr>
                         @endforeach
                     </tbody>
                 </table>
